@@ -1,0 +1,102 @@
+@import '_variables';
+
+.notes-creation {
+  display: flex;
+  justify-content: center;
+
+  .notes-creation__form {
+    width: 45%;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+
+    .form {
+      display: flex;
+      gap: 20px;
+      flex-direction: column;
+    }
+  }
+
+  .notes-creation__image {
+    align-self: center;
+  }
+}
+
+.input__wrapper,
+.textarea__wrapper {
+  margin-bottom: 15px;
+  width: 100%;
+
+  .input__label,
+  .textarea__label {
+    display: block;
+  }
+
+  .input__field,
+  .textarea__field {
+    display: block;
+    width: 80%;
+    height: 40px;
+    padding: 5px;
+    border-radius: 3px;
+    border: solid 1px $grey;
+    outline: none;
+    transition: $transition;
+
+    &:focus,
+    &:hover {
+      border: solid 1px $primaryColor;
+      box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.07);
+    }
+
+    &:disabled {
+      border: solid 1px $grey;
+      background-color: $backgroundGrey;
+      box-shadow: none;
+    }
+  }
+
+  .textarea__field {
+    min-height: 155px;
+    max-height: 300px;
+    resize: vertical;
+  }
+}
+
+.button {
+  width: 200px;
+  height: 50px;
+  padding: 5px;
+  font-size: 18px;
+  color: $textButtonColor;
+  background-color: $primaryColor;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    opacity: $hoverOpacity;
+    box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    background-color: $grey;
+    color: $textButtonColor;
+    opacity: 0.5;
+    cursor: auto;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  &:active {
+    opacity: 1;
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}

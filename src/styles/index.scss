@@ -26,6 +26,9 @@ body {
 main {
   padding: 20px;
   grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 h1,
@@ -36,4 +39,8 @@ h5,
 h6 {
   font-weight: 700;
   font-family: 'Arvo', serif;
+}
+
+h1 {
+  font-size: 36px;
 }

@@ -1,7 +1,11 @@
 import React from 'react';
 
+import MainPage from 'pages/MainPage';
+
+import './styles/styles.scss';
+
 function App() {
-  return <main>App</main>;
+  return <MainPage />;
 }
 
 export default App;
