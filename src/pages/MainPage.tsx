@@ -1,4 +1,4 @@
-import { collection, getDocs } from '@firebase/firestore';
+import { addDoc, collection, getDocs } from '@firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
 import Form from 'components/Form';
@@ -6,14 +6,24 @@ import Loader from 'components/Loader';
 import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 
+import defaultNote from 'utils/constants';
+import Note from 'utils/interfaces';
+
 import dataBase from '../firebase';
-import Note from '../utils/interfaces';
 
 function MainPage() {
   const [defaultNotes, setDefaultNotes] = useState<Note[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState<Note>(defaultNote);
   const [isLoading, setLoading] = useState(false);
+
   const notesCollection = collection(dataBase, 'notes');
+
+  const createNote = async () => {
+    await addDoc(notesCollection, newNote);
+    setNotes((prev) => [...prev, newNote]);
+    setNewNote(defaultNote);
+  };
 
   useEffect(() => {
     (async () => {
@@ -31,12 +41,17 @@ function MainPage() {
 
   return (
     <main>
-      <section className="notes-editor">
-        <div className="notes-editor__form">
+      <section className="notes-creation">
+        <div className="notes-creation__form">
           <h1>Create and edit your notes</h1>
-          <Form />
+          <Form
+            buttonText="Create"
+            note={newNote}
+            setNote={setNewNote}
+            onSubmit={createNote}
+          />
         </div>
-        <div className="notes-editor__image">
+        <div className="notes-creation__image">
           <MainPageImage />
         </div>
       </section>

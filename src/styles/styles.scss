@@ -1,10 +1,10 @@
 @import '_variables';
 
-.notes-editor {
+.notes-creation {
   display: flex;
   justify-content: center;
 
-  .notes-editor__form {
+  .notes-creation__form {
     width: 50%;
     display: flex;
     gap: 20px;
@@ -17,7 +17,7 @@
     }
   }
 
-  .notes-editor__image {
+  .notes-creation__image {
     align-self: center;
   }
 }
