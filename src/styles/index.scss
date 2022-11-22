@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: $textFont;
   font-weight: 400;
   font-size: 18px;
   color: $textColor;
@@ -38,7 +38,7 @@ h4,
 h5,
 h6 {
   font-weight: 700;
-  font-family: 'Arvo', serif;
+  font-family: $titleFont;
 }
 
 h1 {
