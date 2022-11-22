@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Note from 'utils/interfaces';
 import SetState from 'utils/types';
@@ -15,6 +15,15 @@ interface FormProps {
 }
 
 function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!note.title || !note.text) {
+      setButtonDisabled(true);
+    }
+    return () => setButtonDisabled(false);
+  }, [note]);
+
   return (
     <form className="form">
       <Input
@@ -37,7 +46,12 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
           setNote((prev) => ({ ...prev, text: target.value }));
         }}
       />
-      <Button innerText={buttonText} id="clear" callback={onSubmit} />
+      <Button
+        innerText={buttonText}
+        id="clear"
+        callback={onSubmit}
+        disabled={isButtonDisabled}
+      />
     </form>
   );
 }
