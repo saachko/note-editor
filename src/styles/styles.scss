@@ -42,6 +42,8 @@
     border: solid 1px $grey;
     outline: none;
     transition: $transition;
+    font-family: $textFont;
+    font-size: 16px;
 
     &:focus,
     &:hover {
