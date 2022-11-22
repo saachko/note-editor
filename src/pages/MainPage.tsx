@@ -6,6 +6,7 @@ import {
   getDocs,
 } from '@firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 import Form from 'components/Form';
 import Loader from 'components/Loader';
@@ -13,6 +14,7 @@ import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 
 import defaultNote from 'utils/constants';
+import sortByDate from 'utils/functions';
 import Note from 'utils/interfaces';
 
 import dataBase from '../firebase';
@@ -26,7 +28,6 @@ function MainPage() {
   const notesCollection = collection(dataBase, 'notes');
 
   const getNotes = async () => {
-    setLoading(true);
     const data = await getDocs(notesCollection);
     const notesFromDataBase: Note[] = data.docs.map((item) => ({
       ...item.data(),
@@ -34,11 +35,14 @@ function MainPage() {
     }));
     setNotes(notesFromDataBase);
     setDefaultNotes(notesFromDataBase);
-    setLoading(false);
   };
 
   const createNote = async () => {
-    await addDoc(notesCollection, newNote);
+    await addDoc(notesCollection, {
+      ...newNote,
+      id: v4(),
+      date: new Date(),
+    });
     getNotes();
     setNewNote(defaultNote);
   };
@@ -50,7 +54,11 @@ function MainPage() {
   };
 
   useEffect(() => {
-    getNotes();
+    (async () => {
+      setLoading(true);
+      await getNotes();
+      setLoading(false);
+    })();
   }, []);
 
   return (
@@ -74,14 +82,16 @@ function MainPage() {
       >
         {isLoading && <Loader />}
         {!isLoading && notes.length ? (
-          notes.map((note) => (
-            <NoteItem
-              key={note.id}
-              title={note?.title}
-              text={note.text}
-              deleteNote={() => deleteNote(note.id)}
-            />
-          ))
+          notes
+            .sort(sortByDate())
+            .map((note) => (
+              <NoteItem
+                key={note.id}
+                title={note?.title}
+                text={note.text}
+                deleteNote={() => deleteNote(note.id)}
+              />
+            ))
         ) : (
           <p className="note__item_empty">{`It seems you don't have notes yet`}</p>
         )}

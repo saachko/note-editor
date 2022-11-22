@@ -3,6 +3,7 @@ interface Note {
   title?: string;
   text?: string;
   tags?: string[];
+  date?: Date;
 }
 
 export default Note;
