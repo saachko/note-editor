@@ -21,7 +21,7 @@ function Form() {
         placeholder="Start typing.."
         onChange={() => {}}
       />
-      <Button innerText="Create" id="clear" callback={() => {}} />
+      <Button innerText="Ok" id="clear" callback={() => {}} />
     </form>
   );
 }
