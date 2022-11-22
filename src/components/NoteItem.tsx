@@ -4,9 +4,10 @@ import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 interface NoteItemProps {
   title?: string;
   text?: string;
+  deleteNote: () => void;
 }
 
-function NoteItem({ title, text }: NoteItemProps) {
+function NoteItem({ title, text, deleteNote }: NoteItemProps) {
   return (
     <div className="note">
       <div className="note__container">
@@ -17,7 +18,12 @@ function NoteItem({ title, text }: NoteItemProps) {
         <button type="button" id="edit" className="button">
           <AiOutlineEdit />
         </button>
-        <button type="button" id="delete" className="button">
+        <button
+          type="button"
+          id="delete"
+          className="button"
+          onClick={deleteNote}
+        >
           <AiOutlineDelete />
         </button>
       </div>

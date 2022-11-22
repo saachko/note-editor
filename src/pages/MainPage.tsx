@@ -1,4 +1,10 @@
-import { addDoc, collection, getDocs } from '@firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from '@firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
 import Form from 'components/Form';
@@ -19,24 +25,32 @@ function MainPage() {
 
   const notesCollection = collection(dataBase, 'notes');
 
+  const getNotes = async () => {
+    setLoading(true);
+    const data = await getDocs(notesCollection);
+    const notesFromDataBase: Note[] = data.docs.map((item) => ({
+      ...item.data(),
+      id: item.id,
+    }));
+    setNotes(notesFromDataBase);
+    setDefaultNotes(notesFromDataBase);
+    setLoading(false);
+  };
+
   const createNote = async () => {
     await addDoc(notesCollection, newNote);
-    setNotes((prev) => [...prev, newNote]);
+    getNotes();
     setNewNote(defaultNote);
   };
 
+  const deleteNote = async (id: string) => {
+    const note = doc(dataBase, 'notes', id);
+    await deleteDoc(note);
+    getNotes();
+  };
+
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const data = await getDocs(notesCollection);
-      const notesFromDataBase: Note[] = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setNotes(notesFromDataBase);
-      setDefaultNotes(notesFromDataBase);
-      setLoading(false);
-    })();
+    getNotes();
   }, []);
 
   return (
@@ -61,7 +75,12 @@ function MainPage() {
         {isLoading && <Loader />}
         {!isLoading && notes.length ? (
           notes.map((note) => (
-            <NoteItem key={note.id} title={note?.title} text={note.text} />
+            <NoteItem
+              key={note.id}
+              title={note?.title}
+              text={note.text}
+              deleteNote={() => deleteNote(note.id)}
+            />
           ))
         ) : (
           <p className="note__item_empty">{`It seems you don't have notes yet`}</p>
