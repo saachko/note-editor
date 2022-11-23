@@ -18,3 +18,20 @@ $activeOpacity: 0.4;
 
 $textFont: 'Inter', sans-serif;
 $titleFont: 'Montserrat', sans-serif;
+
+%control-button {
+  width: 35px;
+  height: 35px;
+  background-color: $transparent;
+  transform: scale(1.2);
+
+  &:hover {
+    background-color: $backgroundGrey;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  &:active {
+    opacity: $activeOpacity;
+  }
+}

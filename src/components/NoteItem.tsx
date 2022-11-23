@@ -5,9 +5,10 @@ interface NoteItemProps {
   title?: string;
   text?: string;
   deleteNote: () => void;
+  editNote: () => void;
 }
 
-function NoteItem({ title, text, deleteNote }: NoteItemProps) {
+function NoteItem({ title, text, deleteNote, editNote }: NoteItemProps) {
   return (
     <div className="note">
       <div className="note__container">
@@ -15,7 +16,7 @@ function NoteItem({ title, text, deleteNote }: NoteItemProps) {
         <p>{text}</p>
       </div>
       <div className="note__controls">
-        <button type="button" id="edit" className="button">
+        <button type="button" id="edit" className="button" onClick={editNote}>
           <AiOutlineEdit />
         </button>
         <button

@@ -11,6 +11,7 @@ import { v4 } from 'uuid';
 
 import Form from 'components/Form';
 import Loader from 'components/Loader';
+import Modal from 'components/Modal';
 import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 
@@ -25,6 +26,8 @@ function MainPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<Note>(defaultNote);
   const [isLoading, setLoading] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editedNote, setEditedNote] = useState<Note>(defaultNote);
 
   const notesCollection = collection(dataBase, 'notes');
 
@@ -98,12 +101,14 @@ function MainPage() {
                 title={note?.title}
                 text={note.text}
                 deleteNote={() => deleteNote(note.id)}
+                editNote={() => setModalOpen(true)}
               />
             ))
         ) : (
           <p className="note__item_empty">{`It seems you don't have notes yet`}</p>
         )}
       </section>
+      {isModalOpen && <Modal setActive={setModalOpen} />}
     </main>
   );
 }
