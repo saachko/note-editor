@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import Note from 'utils/interfaces';
@@ -46,4 +46,4 @@ function Modal({
   );
 }
 
-export default Modal;
+export default memo(Modal);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 
 interface NoteItemProps {
@@ -37,4 +37,4 @@ NoteItem.defaultProps = {
   text: '',
 };
 
-export default NoteItem;
+export default memo(NoteItem);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import Note from 'utils/interfaces';
 import SetState from 'utils/types';
@@ -105,4 +105,4 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
   );
 }
 
-export default Form;
+export default memo(Form);

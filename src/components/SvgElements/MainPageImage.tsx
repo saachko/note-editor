@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 function MainPageImage() {
   return (
@@ -161,4 +161,4 @@ function MainPageImage() {
   );
 }
 
-export default MainPageImage;
+export default memo(MainPageImage);

@@ -6,7 +6,7 @@ import {
   getDocs,
   updateDoc,
 } from '@firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 import Form from 'components/Form';
@@ -126,4 +126,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default memo(MainPage);
