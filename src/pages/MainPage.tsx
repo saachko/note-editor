@@ -57,11 +57,16 @@ function MainPage() {
     await getNotes();
   };
 
-  const updateNote = async (id: string, note: Note) => {
-    const updatedNote = doc(dataBase, 'notes', id);
+  const updateNote = async (note: Note) => {
+    const updatedNote = doc(dataBase, 'notes', note.id);
     const newNoteData = { title: note.title, text: note.text };
     await updateDoc(updatedNote, newNoteData);
     await getNotes();
+  };
+
+  const editNote = async () => {
+    await updateNote(editedNote);
+    setModalOpen(false);
   };
 
   useEffect(() => {
@@ -114,6 +119,7 @@ function MainPage() {
           setActive={setModalOpen}
           editedNote={editedNote}
           setEditedNote={setEditedNote}
+          editFormHandler={editNote}
         />
       )}
     </main>

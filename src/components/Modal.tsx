@@ -10,9 +10,15 @@ interface ModalProps {
   setActive: SetState<boolean>;
   editedNote: Note;
   setEditedNote: SetState<Note>;
+  editFormHandler: () => void;
 }
 
-function Modal({ setActive, editedNote, setEditedNote }: ModalProps) {
+function Modal({
+  setActive,
+  editedNote,
+  setEditedNote,
+  editFormHandler,
+}: ModalProps) {
   return (
     <div className="shadow" onClick={() => setActive(false)} aria-hidden="true">
       <div
@@ -25,7 +31,7 @@ function Modal({ setActive, editedNote, setEditedNote }: ModalProps) {
           buttonText="Edit"
           note={editedNote}
           setNote={setEditedNote}
-          onSubmit={() => {}}
+          onSubmit={editFormHandler}
         />
         <button
           type="button"
