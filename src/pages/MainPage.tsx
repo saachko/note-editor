@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from '@firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
@@ -43,14 +44,21 @@ function MainPage() {
       id: v4(),
       date: new Date(),
     });
-    getNotes();
+    await getNotes();
     setNewNote(defaultNote);
   };
 
   const deleteNote = async (id: string) => {
     const note = doc(dataBase, 'notes', id);
     await deleteDoc(note);
-    getNotes();
+    await getNotes();
+  };
+
+  const updateNote = async (id: string, note: Note) => {
+    const updatedNote = doc(dataBase, 'notes', id);
+    const newNoteData = { title: note.title, text: note.text };
+    await updateDoc(updatedNote, newNoteData);
+    await getNotes();
   };
 
   useEffect(() => {
