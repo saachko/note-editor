@@ -35,3 +35,9 @@ $titleFont: 'Montserrat', sans-serif;
     opacity: $activeOpacity;
   }
 }
+
+%form {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}

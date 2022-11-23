@@ -76,7 +76,7 @@ function MainPage() {
     <main>
       <section className="notes-creation">
         <div className="notes-creation__form">
-          <h1>Create and edit your notes</h1>
+          <h1>Create a note</h1>
           <Form
             buttonText="Create"
             note={newNote}
@@ -93,22 +93,29 @@ function MainPage() {
       >
         {isLoading && <Loader />}
         {!isLoading && notes.length ? (
-          notes
-            .sort(sortByDate())
-            .map((note) => (
-              <NoteItem
-                key={note.id}
-                title={note?.title}
-                text={note.text}
-                deleteNote={() => deleteNote(note.id)}
-                editNote={() => setModalOpen(true)}
-              />
-            ))
+          notes.sort(sortByDate()).map((note) => (
+            <NoteItem
+              key={note.id}
+              title={note?.title}
+              text={note.text}
+              deleteNote={() => deleteNote(note.id)}
+              editNote={() => {
+                setEditedNote(note);
+                setModalOpen(true);
+              }}
+            />
+          ))
         ) : (
           <p className="note__item_empty">{`It seems you don't have notes yet`}</p>
         )}
       </section>
-      {isModalOpen && <Modal setActive={setModalOpen} />}
+      {isModalOpen && (
+        <Modal
+          setActive={setModalOpen}
+          editedNote={editedNote}
+          setEditedNote={setEditedNote}
+        />
+      )}
     </main>
   );
 }

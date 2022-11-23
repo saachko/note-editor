@@ -1,13 +1,18 @@
 import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
+import Note from 'utils/interfaces';
 import SetState from 'utils/types';
+
+import Form from './Form';
 
 interface ModalProps {
   setActive: SetState<boolean>;
+  editedNote: Note;
+  setEditedNote: SetState<Note>;
 }
 
-function Modal({ setActive }: ModalProps) {
+function Modal({ setActive, editedNote, setEditedNote }: ModalProps) {
   return (
     <div className="shadow" onClick={() => setActive(false)} aria-hidden="true">
       <div
@@ -15,11 +20,17 @@ function Modal({ setActive }: ModalProps) {
         onClick={(event) => event.stopPropagation()}
         aria-hidden="true"
       >
-        <p>This is the modal</p>
+        <h2>Edit your note</h2>
+        <Form
+          buttonText="Edit"
+          note={editedNote}
+          setNote={setEditedNote}
+          onSubmit={() => {}}
+        />
         <button
           type="button"
           id="close"
-          className="button"
+          className="button close-button"
           onClick={() => setActive(false)}
         >
           <AiOutlineClose />

@@ -11,9 +11,7 @@
     flex-direction: column;
 
     .form {
-      display: flex;
-      gap: 20px;
-      flex-direction: column;
+      @extend %form;
     }
   }
 
@@ -222,16 +220,25 @@
   border-radius: 5px;
   background-color: $backgroundWhite;
   width: 500px;
-  height: 175px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   position: relative;
 
-  .button {
+  .button.close-button {
     @extend %control-button;
     color: $primaryColor;
     position: absolute;
     top: 4px;
     right: 4px;
+  }
+
+  .form {
+    @extend %form;
+
+    .input__field,
+    .textarea__field {
+      width: 90%;
+    }
   }
 }
