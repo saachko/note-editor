@@ -1,13 +1,4 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from '@firebase/firestore';
 import React, { memo, useEffect, useState } from 'react';
-import { v4 } from 'uuid';
 
 import Form from 'components/Form';
 import Loader from 'components/Loader';
@@ -16,10 +7,9 @@ import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 
 import defaultNote from 'utils/constants';
+import { createNote, deleteNote, getNotes, updateNote } from 'utils/dataBase';
 import sortByDate from 'utils/functions';
 import Note from 'utils/interfaces';
-
-import dataBase from '../firebase';
 
 function MainPage() {
   const [defaultNotes, setDefaultNotes] = useState<Note[]>([]);
@@ -29,50 +19,33 @@ function MainPage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedNote, setEditedNote] = useState<Note>(defaultNote);
 
-  const notesCollection = collection(dataBase, 'notes');
-
-  const getNotes = async () => {
-    const data = await getDocs(notesCollection);
-    const notesFromDataBase: Note[] = data.docs.map((item) => ({
-      ...item.data(),
-      id: item.id,
-    }));
+  const getNotesFromDatabase = async () => {
+    const notesFromDataBase = await getNotes();
     setNotes(notesFromDataBase);
     setDefaultNotes(notesFromDataBase);
   };
 
-  const createNote = async () => {
-    await addDoc(notesCollection, {
-      ...newNote,
-      id: v4(),
-      date: new Date(),
-    });
-    await getNotes();
+  const createNewNote = async () => {
+    await createNote(newNote);
+    await getNotesFromDatabase();
     setNewNote(defaultNote);
   };
 
-  const deleteNote = async (id: string) => {
-    const note = doc(dataBase, 'notes', id);
-    await deleteDoc(note);
-    await getNotes();
-  };
-
-  const updateNote = async (note: Note) => {
-    const updatedNote = doc(dataBase, 'notes', note.id);
-    const newNoteData = { title: note.title, text: note.text };
-    await updateDoc(updatedNote, newNoteData);
-    await getNotes();
+  const removeNote = async (id: string) => {
+    await deleteNote(id);
+    await getNotesFromDatabase();
   };
 
   const editNote = async () => {
     await updateNote(editedNote);
+    await getNotesFromDatabase();
     setModalOpen(false);
   };
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await getNotes();
+      await getNotesFromDatabase();
       setLoading(false);
     })();
   }, []);
@@ -86,7 +59,7 @@ function MainPage() {
             buttonText="Create"
             note={newNote}
             setNote={setNewNote}
-            onSubmit={createNote}
+            onSubmit={createNewNote}
           />
         </div>
         <div className="notes-creation__image">
@@ -101,9 +74,9 @@ function MainPage() {
           notes.sort(sortByDate()).map((note) => (
             <NoteItem
               key={note.id}
-              title={note?.title}
+              title={note.title}
               text={note.text}
-              deleteNote={() => deleteNote(note.id)}
+              deleteNote={() => removeNote(note.id)}
               editNote={() => {
                 setEditedNote(note);
                 setModalOpen(true);
