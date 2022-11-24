@@ -1,14 +1,14 @@
 interface Note {
   id: string;
-  title?: string;
-  text?: string;
-  tags?: string[];
+  title: string;
+  text: string;
+  noteTags: string[];
   date?: Date;
 }
 
 interface Tag {
   id: string;
-  tagName?: string;
+  tagName: string;
   date?: Date;
 }
 

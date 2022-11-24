@@ -25,10 +25,10 @@ const useNotes = () => {
 
   const getNotes = async () => {
     const data = await getDocs(notesCollection);
-    const notesFromDataBase: Note[] = data.docs.map((item) => ({
+    const notesFromDataBase = data.docs.map((item) => ({
       ...item.data(),
       id: item.id,
-    }));
+    })) as Note[];
     setNotes(notesFromDataBase);
     setDefaultNotes(notesFromDataBase);
   };
@@ -56,9 +56,11 @@ const useNotes = () => {
   };
 
   const editNote = async () => {
-    await updateNote(editedNote);
-    await getNotes();
-    setModalOpen(false);
+    if (editedNote) {
+      await updateNote(editedNote);
+      await getNotes();
+      setModalOpen(false);
+    }
   };
 
   return {

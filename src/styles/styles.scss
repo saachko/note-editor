@@ -75,6 +75,30 @@
   }
 }
 
+.form {
+  .tags__list {
+    justify-content: flex-end;
+
+    .tag__input {
+      display: none;
+
+      &:checked + .tag {
+        border: 1px solid $primaryColor;
+      }
+    }
+
+    .tag {
+      color: $primaryColor;
+      background-color: $backgroundGrey;
+      border: 1px solid $backgroundGrey;
+
+      &:hover {
+        border: 1px solid $primaryColor;
+      }
+    }
+  }
+}
+
 .button {
   width: 200px;
   height: 50px;

@@ -22,11 +22,12 @@ const useTags = () => {
 
   const getTags = async () => {
     const data = await getDocs(tagsCollection);
-    const tagsFromDataBase: Tag[] = data.docs.map((item) => ({
+    const tagsFromDataBase = data.docs.map((item) => ({
       ...item.data(),
       id: item.id,
-    }));
+    })) as Tag[];
     setTags(tagsFromDataBase);
+    return tagsFromDataBase;
   };
 
   const createTag = async (tagToCreate: Tag) => {
@@ -48,10 +49,19 @@ const useTags = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      await getTags();
-    })();
+    getTags();
   }, []);
+
+  const onEnter = async (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      await getTags();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', onEnter);
+    return () => window.removeEventListener('keyup', onEnter);
+  }, [tags]);
 
   return {
     tags,

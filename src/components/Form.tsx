@@ -1,7 +1,11 @@
 import React, { memo, useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
+import { sortByDate } from 'utils/functions';
 import { Note } from 'utils/interfaces';
 import SetState from 'utils/types';
+
+import useTags from 'hooks/useTags';
 
 import Button from './Button';
 import Input from './Input';
@@ -18,6 +22,7 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [titleErrorMessage, setTitleErrorMessage] = useState('');
   const [textErrorMessage, setTextErrorMessage] = useState('');
+  const { tags } = useTags();
 
   const validateForm = () => {
     let isFormValid = true;
@@ -78,6 +83,20 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
     return () => setButtonDisabled(false);
   }, [note]);
 
+  const addTags = (tagName: string) => {
+    if (note.noteTags.find((item) => item === tagName)) {
+      setNote((prev) => ({
+        ...prev,
+        noteTags: [...prev.noteTags.filter((item) => item !== tagName)],
+      }));
+      return;
+    }
+    setNote((prev) => ({
+      ...prev,
+      noteTags: [...prev.noteTags, tagName],
+    }));
+  };
+
   return (
     <form className="form">
       <div className="form-field__wrapper">
@@ -105,6 +124,21 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
           }}
         />
         <p className="form-field__error">{textErrorMessage}</p>
+      </div>
+      <div className="tags__list">
+        {tags.sort(sortByDate()).map((tag) => (
+          <div key={v4()}>
+            <input
+              type="checkbox"
+              id={tag.id}
+              className="tag__input"
+              onClick={() => addTags(tag.tagName)}
+            />
+            <label id={tag.tagName} className="tag" htmlFor={tag.id}>
+              {tag.tagName}
+            </label>
+          </div>
+        ))}
       </div>
       <Button
         innerText={buttonText}
