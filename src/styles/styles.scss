@@ -193,6 +193,21 @@
       }
     }
   }
+
+  .tags__list {
+    justify-content: flex-end;
+
+    .tag {
+      color: $primaryColor;
+      background-color: $backgroundGrey;
+      border: 1px solid $backgroundGrey;
+      cursor: default;
+
+      &:hover {
+        transform: scale(1);
+      }
+    }
+  }
 }
 
 @keyframes loadAnimation {

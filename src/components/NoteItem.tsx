@@ -1,19 +1,37 @@
 import React, { memo } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
+import { v4 } from 'uuid';
 
 interface NoteItemProps {
-  title?: string;
-  text?: string;
+  title: string;
+  text: string;
+  tags: string[];
   deleteNote: () => void;
   editNote: () => void;
 }
 
-function NoteItem({ title, text, deleteNote, editNote }: NoteItemProps) {
+function NoteItem({ title, text, tags, deleteNote, editNote }: NoteItemProps) {
   return (
     <div className="note">
       <div className="note__container">
         <h2>{title}</h2>
         <p>{text}</p>
+        <ul className="tags__list">
+          {tags &&
+            tags.length > 0 &&
+            tags.map((tag) => (
+              <li
+                key={v4()}
+                className="tag"
+                aria-hidden="true"
+                onClick={({ target }) =>
+                  (target as HTMLElement).classList.toggle('tag_active')
+                }
+              >
+                {tag}
+              </li>
+            ))}
+        </ul>
       </div>
       <div className="note__controls">
         <button type="button" id="edit" className="button" onClick={editNote}>
@@ -31,10 +49,5 @@ function NoteItem({ title, text, deleteNote, editNote }: NoteItemProps) {
     </div>
   );
 }
-
-NoteItem.defaultProps = {
-  title: '',
-  text: '',
-};
 
 export default memo(NoteItem);

@@ -64,6 +64,7 @@ function MainPage() {
             <NoteItem
               key={note.id}
               title={note.title}
+              tags={note.noteTags}
               text={note.text}
               deleteNote={() => deleteNote(note.id)}
               editNote={() => {
