@@ -27,6 +27,9 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
       setTitleErrorMessage(
         "This field can't be shorter than 2 or longer than 30 characters"
       );
+    } else if (!note.title) {
+      isFormValid = false;
+      setTitleErrorMessage("This field can't be empty");
     } else {
       isFormValid = true;
       setTitleErrorMessage('');
@@ -37,6 +40,9 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
       setTextErrorMessage(
         "This field can't be shorter than 10 or longer than 300 characters"
       );
+    } else if (!note.text) {
+      isFormValid = false;
+      setTextErrorMessage("This field can't be empty");
     } else {
       isFormValid = true;
       setTextErrorMessage('');
@@ -46,13 +52,16 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
   };
 
   useEffect(() => {
-    if (!note.title) {
+    if (titleErrorMessage) {
       setTitleErrorMessage('');
     }
-    if (!note.text) {
+  }, [note.title]);
+
+  useEffect(() => {
+    if (textErrorMessage) {
       setTextErrorMessage('');
     }
-  }, [note]);
+  }, [note.text]);
 
   const handleOnSubmit = () => {
     if (validateForm()) {
@@ -61,8 +70,10 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
   };
 
   useEffect(() => {
-    if (!note.title || !note.text) {
+    if (!note.title && !note.text) {
       setButtonDisabled(true);
+      setTitleErrorMessage('');
+      setTextErrorMessage('');
     }
     return () => setButtonDisabled(false);
   }, [note]);
