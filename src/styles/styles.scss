@@ -286,6 +286,13 @@
 .tags-container {
   width: 85%;
   align-self: center;
+  position: relative;
+
+  .tag-error {
+    font-size: 12px;
+    color: $red;
+    position: absolute;
+  }
 }
 
 .tags__wrapper {

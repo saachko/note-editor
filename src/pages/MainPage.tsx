@@ -34,6 +34,7 @@ function MainPage() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [newTag, setNewTag] = useState(defaultTag);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [isTagCreationError, setTagCreationError] = useState(false);
 
   const notesCollection = collection(dataBase, 'notes');
   const tagsCollection = collection(dataBase, 'tags');
@@ -101,6 +102,12 @@ function MainPage() {
   };
 
   const createTag = async (tagToCreate: Tag) => {
+    if (
+      tags.find((item) => item.tagName === addHashtagToTag(tagToCreate).tagName)
+    ) {
+      setTagCreationError(true);
+      return;
+    }
     if (tagToCreate.tagName) {
       await addDoc(tagsCollection, {
         ...addHashtagToTag(tagToCreate),
@@ -111,6 +118,14 @@ function MainPage() {
       setNewTag(defaultTag);
     }
   };
+
+  useEffect(() => {
+    if (isTagCreationError) {
+      setTimeout(() => {
+        setTagCreationError(false);
+      }, 3000);
+    }
+  }, [isTagCreationError]);
 
   const deleteTag = async (tagToDelete: Tag) => {
     const tag = doc(dataBase, 'tags', tagToDelete.id);
@@ -168,6 +183,9 @@ function MainPage() {
           createTag={createTag}
           deleteTag={deleteTag}
         />
+        {isTagCreationError && (
+          <p className="tag-error">{`You can't create two identical tags`}</p>
+        )}
       </section>
       <section
         className={notes.length ? 'notes-container' : 'notes-container_empty'}
