@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 
-import Note from 'utils/interfaces';
+import { Note } from 'utils/interfaces';
 import SetState from 'utils/types';
 
 import Button from './Button';

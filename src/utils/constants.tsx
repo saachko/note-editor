@@ -5,4 +5,9 @@ const defaultNote = {
   tags: [],
 };
 
-export default defaultNote;
+const defaultTag = {
+  id: 'default',
+  tagName: '',
+};
+
+export { defaultNote, defaultTag };

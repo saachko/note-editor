@@ -6,4 +6,10 @@ interface Note {
   date?: Date;
 }
 
-export default Note;
+interface Tag {
+  id: string;
+  tagName?: string;
+  date?: Date;
+}
+
+export type { Note, Tag };

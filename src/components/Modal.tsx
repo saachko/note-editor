@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
-import Note from 'utils/interfaces';
+import { Note } from 'utils/interfaces';
 import SetState from 'utils/types';
 
 import Form from './Form';

@@ -9,8 +9,8 @@ import {
 import { useState } from 'react';
 import { v4 } from 'uuid';
 
-import defaultNote from 'utils/constants';
-import Note from 'utils/interfaces';
+import { defaultNote } from 'utils/constants';
+import { Note } from 'utils/interfaces';
 
 import dataBase from '../firebase';
 

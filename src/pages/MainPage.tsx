@@ -1,3 +1,4 @@
+import { collection, getDocs } from '@firebase/firestore';
 import React, { memo, useEffect, useState } from 'react';
 
 import Form from 'components/Form';
@@ -5,10 +6,14 @@ import Loader from 'components/Loader';
 import Modal from 'components/Modal';
 import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
+import TagsInput from 'components/TagsInput';
 
 import sortByDate from 'utils/functions';
+import { Tag } from 'utils/interfaces';
 
 import useNotes from 'hooks/useNotes';
+
+import dataBase from '../firebase';
 
 function MainPage() {
   const [isLoading, setLoading] = useState(false);
@@ -35,6 +40,20 @@ function MainPage() {
     })();
   }, []);
 
+  const [tags, setTags] = useState<Tag[]>([]);
+
+  const tagsCollection = collection(dataBase, 'tags');
+  useEffect(() => {
+    (async () => {
+      const data = await getDocs(tagsCollection);
+      const tagsFromDataBase: Tag[] = data.docs.map((item) => ({
+        ...item.data(),
+        id: item.id,
+      }));
+      setTags(tagsFromDataBase);
+    })();
+  }, []);
+
   return (
     <main>
       <section className="notes-creation">
@@ -50,6 +69,9 @@ function MainPage() {
         <div className="notes-creation__image">
           <MainPageImage />
         </div>
+      </section>
+      <section className="tags-container">
+        <TagsInput tags={tags} setTags={setTags} />
       </section>
       <section
         className={notes.length ? 'notes-container' : 'notes-container_empty'}
