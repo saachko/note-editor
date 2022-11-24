@@ -70,7 +70,7 @@ function TagsInput({ tags, setTags }: TagsInputProps) {
             <button
               type="button"
               id="close"
-              className="button close-button"
+              className="button tag__close-button"
               onClick={() => deleteTag(tag.id)}
             >
               <AiOutlineClose />
@@ -79,13 +79,14 @@ function TagsInput({ tags, setTags }: TagsInputProps) {
         ))}
       </ul>
       <input
+        className="tags__input"
         type="text"
         value={newTag.tagName}
         onChange={({ target }) => {
           setNewTag((prev) => ({ ...prev, tagName: target.value }));
         }}
         onKeyUp={(event) => (event.key === 'Enter' ? createTag(newTag) : null)}
-        placeholder="Press enter to add tags"
+        placeholder="Press Enter to add tags"
       />
     </div>
   );
