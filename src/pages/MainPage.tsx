@@ -13,9 +13,12 @@ import useNotes from 'hooks/useNotes';
 
 function MainPage() {
   const [isLoading, setLoading] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
 
   const {
+    defaultNotes,
     notes,
+    setNotes,
     newNote,
     setNewNote,
     isModalOpen,
@@ -36,6 +39,16 @@ function MainPage() {
     })();
   }, []);
 
+  useEffect(() => {
+    const filteredNotes = defaultNotes.filter((item) =>
+      selectedTags.every((noteTag) => item.noteTags.indexOf(noteTag) >= 0)
+    );
+    setNotes(filteredNotes);
+    if (selectedTags.length === 0) {
+      setNotes(defaultNotes);
+    }
+  }, [selectedTags]);
+
   return (
     <main>
       <section className="notes-creation">
@@ -53,7 +66,10 @@ function MainPage() {
         </div>
       </section>
       <section className="tags-container">
-        <TagsInput />
+        <TagsInput
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+        />
       </section>
       <section
         className={notes.length ? 'notes-container' : 'notes-container_empty'}
