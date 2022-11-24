@@ -12,7 +12,7 @@ interface TagsInputProps {
   newTag: Tag;
   setNewTag: SetState<Tag>;
   createTag: (tagToCreate: Tag) => Promise<void>;
-  deleteTag: (id: string) => Promise<void>;
+  deleteTag: (tagToDelete: Tag) => Promise<void>;
 }
 
 function TagsInput({
@@ -52,7 +52,7 @@ function TagsInput({
               className="button tag__close-button"
               onClick={(event) => {
                 event.stopPropagation();
-                deleteTag(tag.id);
+                deleteTag(tag);
               }}
             >
               <AiOutlineClose />

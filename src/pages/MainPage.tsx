@@ -66,7 +66,11 @@ function MainPage() {
 
   const updateNote = async (note: Note) => {
     const updatedNote = doc(dataBase, 'notes', note.id);
-    const newNoteData = { title: note.title, text: note.text };
+    const newNoteData = {
+      title: note.title,
+      text: note.text,
+      noteTags: note.noteTags,
+    };
     await updateDoc(updatedNote, newNoteData);
   };
 
@@ -108,10 +112,19 @@ function MainPage() {
     }
   };
 
-  const deleteTag = async (id: string) => {
-    const tag = doc(dataBase, 'tags', id);
+  const deleteTag = async (tagToDelete: Tag) => {
+    const tag = doc(dataBase, 'tags', tagToDelete.id);
     await deleteDoc(tag);
     await getTags();
+
+    notes.map((item) =>
+      item.noteTags.indexOf(tagToDelete.tagName) >= 0
+        ? item.noteTags.splice(item.noteTags.indexOf(tagToDelete.tagName), 1) &&
+          updateNote(item)
+        : null
+    );
+
+    await getNotes();
   };
 
   useEffect(() => {
