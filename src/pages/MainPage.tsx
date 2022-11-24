@@ -8,7 +8,7 @@ import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 import TagsInput from 'components/TagsInput';
 
-import sortByDate from 'utils/functions';
+import { sortByDate } from 'utils/functions';
 import { Tag } from 'utils/interfaces';
 
 import useNotes from 'hooks/useNotes';

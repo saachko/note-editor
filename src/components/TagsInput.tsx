@@ -10,7 +10,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { v4 } from 'uuid';
 
 import { defaultTag } from 'utils/constants';
-import sortByDate from 'utils/functions';
+import { addHashtagToTag, sortByDate } from 'utils/functions';
 import { Tag } from 'utils/interfaces';
 import SetState from 'utils/types';
 
@@ -47,7 +47,7 @@ function TagsInput({ tags, setTags }: TagsInputProps) {
 
   const createTag = async (tagToCreate: Tag) => {
     await addDoc(tagsCollection, {
-      ...tagToCreate,
+      ...addHashtagToTag(tagToCreate),
       id: v4(),
       date: new Date(),
     });
