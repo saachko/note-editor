@@ -1,55 +1,12 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-} from '@firebase/firestore';
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { v4 } from 'uuid';
 
-import { defaultTag } from 'utils/constants';
-import { addHashtagToTag, sortByDate } from 'utils/functions';
-import { Tag } from 'utils/interfaces';
-import SetState from 'utils/types';
+import { sortByDate } from 'utils/functions';
 
-import dataBase from '../firebase';
+import useTags from 'hooks/useTags';
 
-interface TagsInputProps {
-  tags: Tag[];
-  setTags: SetState<Tag[]>;
-}
-
-function TagsInput({ tags, setTags }: TagsInputProps) {
-  const [newTag, setNewTag] = useState(defaultTag);
-
-  const tagsCollection = collection(dataBase, 'tags');
-
-  const getTags = async () => {
-    const data = await getDocs(tagsCollection);
-    const tagsFromDataBase: Tag[] = data.docs.map((item) => ({
-      ...item.data(),
-      id: item.id,
-    }));
-    setTags(tagsFromDataBase);
-  };
-
-  const createTag = async (tagToCreate: Tag) => {
-    await addDoc(tagsCollection, {
-      ...addHashtagToTag(tagToCreate),
-      id: v4(),
-      date: new Date(),
-    });
-    await getTags();
-    setNewTag(defaultTag);
-  };
-
-  const deleteTag = async (id: string) => {
-    const tag = doc(dataBase, 'tags', id);
-    await deleteDoc(tag);
-    await getTags();
-  };
+function TagsInput() {
+  const { tags, newTag, setNewTag, createTag, deleteTag } = useTags();
 
   return (
     <div className="tags__wrapper">
