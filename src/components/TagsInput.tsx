@@ -23,16 +23,6 @@ interface TagsInputProps {
 
 function TagsInput({ tags, setTags }: TagsInputProps) {
   const [newTag, setNewTag] = useState(defaultTag);
-  // const removeTags = (indexToRemove) => {
-  //   setTags([...tags.filter((_, index) => index !== indexToRemove)]);
-  // };
-  // const addTags = (event) => {
-  //   if (event.target.value !== '') {
-  //     setTags([...tags, event.target.value]);
-  //     props.selectedTags([...tags, event.target.value]);
-  //     event.target.value = '';
-  //   }
-  // };
 
   const tagsCollection = collection(dataBase, 'tags');
 
@@ -65,8 +55,15 @@ function TagsInput({ tags, setTags }: TagsInputProps) {
     <div className="tags__wrapper">
       <ul className="tags__list">
         {tags.sort(sortByDate()).map((tag) => (
-          <li key={tag.id} className="tag">
-            <span className="tag__title">{tag.tagName}</span>
+          <li
+            key={tag.id}
+            className="tag"
+            aria-hidden="true"
+            onClick={({ target }) =>
+              (target as HTMLElement).classList.toggle('tag_active')
+            }
+          >
+            {tag.tagName}
             <button
               type="button"
               id="close"

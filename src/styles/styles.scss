@@ -296,7 +296,25 @@
   list-style: none;
   border-radius: 3px;
   margin: 0 8px 8px 0;
-  background: $primaryColor;
+  background-color: $primaryColor;
+  user-select: none;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.tag_active,
+  &:hover {
+    background-color: $lightBlue;
+    color: $primaryColor;
+
+    .tag__close-button {
+      background-color: $lightBlue;
+      color: $primaryColor;
+    }
+  }
 
   .tag__close-button {
     width: 16px;
