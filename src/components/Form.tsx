@@ -2,10 +2,8 @@ import React, { memo, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { sortByDate } from 'utils/functions';
-import { Note } from 'utils/interfaces';
+import { Note, Tag } from 'utils/interfaces';
 import SetState from 'utils/types';
-
-import useTags from 'hooks/useTags';
 
 import Button from './Button';
 import Input from './Input';
@@ -16,13 +14,13 @@ interface FormProps {
   note: Note;
   setNote: SetState<Note>;
   onSubmit: () => void;
+  tags: Tag[];
 }
 
-function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
+function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [titleErrorMessage, setTitleErrorMessage] = useState('');
   const [textErrorMessage, setTextErrorMessage] = useState('');
-  const { tags } = useTags();
 
   const validateForm = () => {
     let isFormValid = true;
@@ -132,7 +130,8 @@ function Form({ buttonText, note, setNote, onSubmit }: FormProps) {
               type="checkbox"
               id={tag.id}
               className="tag__input"
-              onClick={() => addTags(tag.tagName)}
+              checked={note.noteTags.includes(tag.tagName)}
+              onChange={() => addTags(tag.tagName)}
             />
             <label id={tag.tagName} className="tag" htmlFor={tag.id}>
               {tag.tagName}

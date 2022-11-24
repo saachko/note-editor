@@ -92,6 +92,7 @@
       background-color: $backgroundGrey;
       border: 1px solid $backgroundGrey;
 
+      &.tag_active,
       &:hover {
         border: 1px solid $primaryColor;
       }

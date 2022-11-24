@@ -2,18 +2,28 @@ import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { sortByDate } from 'utils/functions';
+import { Tag } from 'utils/interfaces';
 import SetState from 'utils/types';
-
-import useTags from 'hooks/useTags';
 
 interface TagsInputProps {
   selectedTags: Array<string>;
   setSelectedTags: SetState<Array<string>>;
+  tags: Tag[];
+  newTag: Tag;
+  setNewTag: SetState<Tag>;
+  createTag: (tagToCreate: Tag) => Promise<void>;
+  deleteTag: (id: string) => Promise<void>;
 }
 
-function TagsInput({ selectedTags, setSelectedTags }: TagsInputProps) {
-  const { tags, newTag, setNewTag, createTag, deleteTag } = useTags();
-
+function TagsInput({
+  selectedTags,
+  setSelectedTags,
+  tags,
+  newTag,
+  setNewTag,
+  createTag,
+  deleteTag,
+}: TagsInputProps) {
   const selectTag = (tagName: string) => {
     if (selectedTags.find((item) => item === tagName)) {
       setSelectedTags((prev) => [...prev.filter((item) => item !== tagName)]);
@@ -40,7 +50,10 @@ function TagsInput({ selectedTags, setSelectedTags }: TagsInputProps) {
               type="button"
               id="close"
               className="button tag__close-button"
-              onClick={() => deleteTag(tag.id)}
+              onClick={(event) => {
+                event.stopPropagation();
+                deleteTag(tag.id);
+              }}
             >
               <AiOutlineClose />
             </button>

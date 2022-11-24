@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
-import { Note } from 'utils/interfaces';
+import { Note, Tag } from 'utils/interfaces';
 import SetState from 'utils/types';
 
 import Form from './Form';
@@ -11,6 +11,7 @@ interface ModalProps {
   editedNote: Note;
   setEditedNote: SetState<Note>;
   editFormHandler: () => void;
+  tags: Tag[];
 }
 
 function Modal({
@@ -18,6 +19,7 @@ function Modal({
   editedNote,
   setEditedNote,
   editFormHandler,
+  tags,
 }: ModalProps) {
   return (
     <div className="shadow" onClick={() => setActive(false)} aria-hidden="true">
@@ -32,6 +34,7 @@ function Modal({
           note={editedNote}
           setNote={setEditedNote}
           onSubmit={editFormHandler}
+          tags={tags}
         />
         <button
           type="button"

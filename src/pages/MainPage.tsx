@@ -1,4 +1,13 @@
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from '@firebase/firestore';
 import React, { memo, useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 import Form from 'components/Form';
 import Loader from 'components/Loader';
@@ -7,29 +16,67 @@ import NoteItem from 'components/NoteItem';
 import MainPageImage from 'components/SvgElements/MainPageImage';
 import TagsInput from 'components/TagsInput';
 
-import { sortByDate } from 'utils/functions';
+import { defaultNote, defaultTag } from 'utils/constants';
+import { addHashtagToTag, sortByDate } from 'utils/functions';
+import { Note, Tag } from 'utils/interfaces';
 
-import useNotes from 'hooks/useNotes';
+import dataBase from '../firebase';
 
 function MainPage() {
   const [isLoading, setLoading] = useState(false);
+
+  const [defaultNotes, setDefaultNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState<Note>(defaultNote);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editedNote, setEditedNote] = useState<Note>(defaultNote);
+
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [newTag, setNewTag] = useState(defaultTag);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
 
-  const {
-    defaultNotes,
-    notes,
-    setNotes,
-    newNote,
-    setNewNote,
-    isModalOpen,
-    setModalOpen,
-    editedNote,
-    setEditedNote,
-    getNotes,
-    createNote,
-    deleteNote,
-    editNote,
-  } = useNotes();
+  const notesCollection = collection(dataBase, 'notes');
+  const tagsCollection = collection(dataBase, 'tags');
+
+  const getNotes = async () => {
+    const data = await getDocs(notesCollection);
+    const notesFromDataBase = data.docs.map((item) => ({
+      ...item.data(),
+      id: item.id,
+    })) as Note[];
+    setNotes(notesFromDataBase);
+    setDefaultNotes(notesFromDataBase);
+  };
+
+  const createNote = async (noteToCreate: Note) => {
+    await addDoc(notesCollection, {
+      ...noteToCreate,
+      id: v4(),
+      date: new Date(),
+    });
+    await getNotes();
+    setNewNote(defaultNote);
+  };
+
+  const deleteNote = async (id: string) => {
+    const note = doc(dataBase, 'notes', id);
+    await deleteDoc(note);
+    await getNotes();
+  };
+
+  const updateNote = async (note: Note) => {
+    const updatedNote = doc(dataBase, 'notes', note.id);
+    const newNoteData = { title: note.title, text: note.text };
+    await updateDoc(updatedNote, newNoteData);
+  };
+
+  const editNote = async () => {
+    if (editedNote) {
+      await updateNote(editedNote);
+      await getNotes();
+      setModalOpen(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -37,6 +84,38 @@ function MainPage() {
       await getNotes();
       setLoading(false);
     })();
+  }, []);
+
+  const getTags = async () => {
+    const data = await getDocs(tagsCollection);
+    const tagsFromDataBase = data.docs.map((item) => ({
+      ...item.data(),
+      id: item.id,
+    })) as Tag[];
+    setTags(tagsFromDataBase);
+    return tagsFromDataBase;
+  };
+
+  const createTag = async (tagToCreate: Tag) => {
+    if (tagToCreate.tagName) {
+      await addDoc(tagsCollection, {
+        ...addHashtagToTag(tagToCreate),
+        id: v4(),
+        date: new Date(),
+      });
+      await getTags();
+      setNewTag(defaultTag);
+    }
+  };
+
+  const deleteTag = async (id: string) => {
+    const tag = doc(dataBase, 'tags', id);
+    await deleteDoc(tag);
+    await getTags();
+  };
+
+  useEffect(() => {
+    getTags();
   }, []);
 
   useEffect(() => {
@@ -59,6 +138,7 @@ function MainPage() {
             note={newNote}
             setNote={setNewNote}
             onSubmit={() => createNote(newNote)}
+            tags={tags}
           />
         </div>
         <div className="notes-creation__image">
@@ -69,6 +149,11 @@ function MainPage() {
         <TagsInput
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
+          tags={tags}
+          newTag={newTag}
+          setNewTag={setNewTag}
+          createTag={createTag}
+          deleteTag={deleteTag}
         />
       </section>
       <section
@@ -99,6 +184,7 @@ function MainPage() {
           editedNote={editedNote}
           setEditedNote={setEditedNote}
           editFormHandler={editNote}
+          tags={tags}
         />
       )}
     </main>
