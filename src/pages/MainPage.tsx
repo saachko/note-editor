@@ -68,7 +68,9 @@ function MainPage() {
     if (
       tags.find((item) => item.tagName === addHashtagToTag(tagToCreate).tagName)
     ) {
-      setTagCreationError(true);
+      if (newTagsFromText.length === 0) {
+        setTagCreationError(true);
+      }
       return;
     }
 
@@ -116,7 +118,6 @@ function MainPage() {
       text: note.text,
       noteTags: [...note.noteTags, ...filteredTags],
     };
-    setNewTagsFromText([]);
     await updateDoc(updatedNote, newNoteData);
   };
 
@@ -124,6 +125,7 @@ function MainPage() {
     if (editedNote) {
       createTagsFromText();
       await updateNote(editedNote);
+      setNewTagsFromText([]);
       await getNotes();
       setModalOpen(false);
     }
@@ -184,10 +186,13 @@ function MainPage() {
     if (newNote.text) {
       setNewTagsFromText(findHashtagsInText(newNote.text));
     }
+  }, [newNote.text]);
+
+  useEffect(() => {
     if (editedNote.text) {
       setNewTagsFromText(findHashtagsInText(editedNote.text));
     }
-  }, [newNote.text, editedNote.text]);
+  }, [editedNote.text]);
 
   return (
     <main>
