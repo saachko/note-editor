@@ -76,26 +76,22 @@
 }
 
 .form {
-  .tags__list {
-    justify-content: flex-end;
+  .tag__input {
+    display: none;
 
-    .tag__input {
-      display: none;
-
-      &:checked + .tag {
-        border: 1px solid $primaryColor;
-      }
+    &:checked + .tag {
+      border: 1px solid $primaryColor;
     }
+  }
 
-    .tag {
-      color: $primaryColor;
-      background-color: $backgroundGrey;
-      border: 1px solid $backgroundGrey;
+  .tag {
+    color: $primaryColor;
+    background-color: $backgroundGrey;
+    border: 1px solid $backgroundGrey;
 
-      &.tag_active,
-      &:hover {
-        border: 1px solid $primaryColor;
-      }
+    &.tag_active,
+    &:hover {
+      border: 1px solid $primaryColor;
     }
   }
 }
@@ -328,6 +324,7 @@
 .tags__list {
   display: flex;
   flex-direction: row-reverse;
+  justify-content: flex-end;
   flex-wrap: wrap;
   margin-top: 8px;
 }
