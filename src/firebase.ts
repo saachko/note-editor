@@ -2,7 +2,7 @@ import { getFirestore } from '@firebase/firestore';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAVbJFg6v4gmY5SpgK01Pbz2mWQ34-6kE4',
+  apiKey: `${process.env.API_KEY}`,
   authDomain: 'note-editor-74fe5.firebaseapp.com',
   projectId: 'note-editor-74fe5',
   storageBucket: 'note-editor-74fe5.appspot.com',
