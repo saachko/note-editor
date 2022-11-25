@@ -128,12 +128,18 @@ function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
           <div key={v4()}>
             <input
               type="checkbox"
-              id={tag.id}
+              id={note.id === 'default' ? tag.id : `${tag.tagName}${tag.id}`}
               className="tag__input"
               checked={note.noteTags.includes(tag.tagName)}
               onChange={() => addTags(tag.tagName)}
             />
-            <label id={tag.tagName} className="tag" htmlFor={tag.id}>
+            <label
+              id={tag.tagName}
+              className="tag"
+              htmlFor={
+                note.id === 'default' ? tag.id : `${tag.tagName}${tag.id}`
+              }
+            >
               {tag.tagName}
             </label>
           </div>
