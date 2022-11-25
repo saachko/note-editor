@@ -53,4 +53,8 @@ $titleFont: 'Montserrat', sans-serif;
   border-radius: 3px;
   outline: none;
   transition: $transition;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }

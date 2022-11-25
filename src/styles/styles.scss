@@ -10,6 +10,10 @@
     gap: 20px;
     flex-direction: column;
 
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
     .form {
       @extend %form;
     }
@@ -17,6 +21,18 @@
 
   .notes-creation__image {
     align-self: center;
+
+    @media (max-width: 1024px) {
+      width: 60%;
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+
+    svg {
+      width: 100%;
+    }
   }
 }
 
@@ -109,6 +125,10 @@
       border: 1px solid $primaryColor;
     }
   }
+
+  .tags__list {
+    min-height: 50px;
+  }
 }
 
 .button {
@@ -193,6 +213,10 @@
     display: flex;
     gap: 10px;
 
+    @media (max-width: 480px) {
+      flex-direction: column;
+    }
+
     .button {
       @extend %control-button;
 
@@ -242,11 +266,11 @@
 .loader {
   display: block;
   position: absolute;
-  top: 45%;
+  top: 50%;
   left: 50%;
-  height: 120px;
-  width: 120px;
-  margin: -60px 0 0 -60px;
+  height: 70px;
+  width: 70px;
+  margin: -35px 0 0 -35px;
   border: 10px rgba(0, 0, 0, 0.25) solid;
   border-top: 10px $primaryColor solid;
   border-radius: 50%;
@@ -267,6 +291,7 @@
 }
 
 .modal {
+  margin: 10px;
   padding: 20px;
   border-radius: 5px;
   background-color: $backgroundWhite;
@@ -299,6 +324,10 @@
   width: 85%;
   align-self: center;
   position: relative;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
   .tag-error {
     font-size: 12px;
@@ -362,7 +391,7 @@
   transition: $transition;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   &.tag_active,

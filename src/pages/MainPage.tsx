@@ -244,7 +244,7 @@ function MainPage() {
             />
           ))
         ) : (
-          <p className="note__item_empty">{`It seems you don't have notes yet`}</p>
+          <p className="note__item_empty">{`It seems you don't have any notes yet`}</p>
         )}
       </section>
       {isModalOpen && (
