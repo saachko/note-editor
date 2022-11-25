@@ -17,7 +17,11 @@ import MainPageImage from 'components/SvgElements/MainPageImage';
 import TagsInput from 'components/TagsInput';
 
 import { defaultNote, defaultTag } from 'utils/constants';
-import { addHashtagToTag, sortByDate } from 'utils/functions';
+import {
+  addHashtagToTag,
+  findHashtagsInText,
+  sortByDate,
+} from 'utils/functions';
 import { Note, Tag } from 'utils/interfaces';
 
 import dataBase from '../firebase';
@@ -35,61 +39,10 @@ function MainPage() {
   const [newTag, setNewTag] = useState(defaultTag);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
   const [isTagCreationError, setTagCreationError] = useState(false);
+  const [newTagsFromText, setNewTagsFromText] = useState<Array<string>>([]);
 
-  const notesCollection = collection(dataBase, 'notes');
   const tagsCollection = collection(dataBase, 'tags');
-
-  const getNotes = async () => {
-    const data = await getDocs(notesCollection);
-    const notesFromDataBase = data.docs.map((item) => ({
-      ...item.data(),
-      id: item.id,
-    })) as Note[];
-    setNotes(notesFromDataBase);
-    setDefaultNotes(notesFromDataBase);
-  };
-
-  const createNote = async (noteToCreate: Note) => {
-    await addDoc(notesCollection, {
-      ...noteToCreate,
-      id: v4(),
-      date: new Date(),
-    });
-    await getNotes();
-    setNewNote(defaultNote);
-  };
-
-  const deleteNote = async (id: string) => {
-    const note = doc(dataBase, 'notes', id);
-    await deleteDoc(note);
-    await getNotes();
-  };
-
-  const updateNote = async (note: Note) => {
-    const updatedNote = doc(dataBase, 'notes', note.id);
-    const newNoteData = {
-      title: note.title,
-      text: note.text,
-      noteTags: note.noteTags,
-    };
-    await updateDoc(updatedNote, newNoteData);
-  };
-
-  const editNote = async () => {
-    if (editedNote) {
-      await updateNote(editedNote);
-      await getNotes();
-      setModalOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      await getNotes();
-      setLoading(false);
-    })();
-  }, []);
+  const notesCollection = collection(dataBase, 'notes');
 
   const getTags = async () => {
     const data = await getDocs(tagsCollection);
@@ -101,6 +54,16 @@ function MainPage() {
     return tagsFromDataBase;
   };
 
+  const getNotes = async () => {
+    const data = await getDocs(notesCollection);
+    const notesFromDataBase = data.docs.map((item) => ({
+      ...item.data(),
+      id: item.id,
+    })) as Note[];
+    setNotes(notesFromDataBase);
+    setDefaultNotes(notesFromDataBase);
+  };
+
   const createTag = async (tagToCreate: Tag) => {
     if (
       tags.find((item) => item.tagName === addHashtagToTag(tagToCreate).tagName)
@@ -108,6 +71,7 @@ function MainPage() {
       setTagCreationError(true);
       return;
     }
+
     if (tagToCreate.tagName) {
       await addDoc(tagsCollection, {
         ...addHashtagToTag(tagToCreate),
@@ -119,13 +83,51 @@ function MainPage() {
     }
   };
 
-  useEffect(() => {
-    if (isTagCreationError) {
-      setTimeout(() => {
-        setTagCreationError(false);
-      }, 3000);
+  const createTagsFromText = () => {
+    if (newTagsFromText.length > 0) {
+      newTagsFromText.map((item) => createTag({ id: v4(), tagName: item }));
     }
-  }, [isTagCreationError]);
+  };
+
+  const createNote = async (noteToCreate: Note) => {
+    createTagsFromText();
+    const filteredTags = newTagsFromText.filter(
+      (item) => noteToCreate.noteTags.indexOf(item) === -1
+    );
+    await addDoc(notesCollection, {
+      title: noteToCreate.title,
+      text: noteToCreate.text,
+      noteTags: [...noteToCreate.noteTags, ...filteredTags],
+      id: v4(),
+      date: new Date(),
+    });
+    setNewTagsFromText([]);
+    await getNotes();
+    setNewNote(defaultNote);
+  };
+
+  const updateNote = async (note: Note) => {
+    const filteredTags = newTagsFromText.filter(
+      (item) => note.noteTags.indexOf(item) === -1
+    );
+    const updatedNote = doc(dataBase, 'notes', note.id);
+    const newNoteData = {
+      title: note.title,
+      text: note.text,
+      noteTags: [...note.noteTags, ...filteredTags],
+    };
+    setNewTagsFromText([]);
+    await updateDoc(updatedNote, newNoteData);
+  };
+
+  const editNote = async () => {
+    if (editedNote) {
+      createTagsFromText();
+      await updateNote(editedNote);
+      await getNotes();
+      setModalOpen(false);
+    }
+  };
 
   const deleteTag = async (tagToDelete: Tag) => {
     const tag = doc(dataBase, 'tags', tagToDelete.id);
@@ -142,6 +144,28 @@ function MainPage() {
     await getNotes();
   };
 
+  const deleteNote = async (id: string) => {
+    const note = doc(dataBase, 'notes', id);
+    await deleteDoc(note);
+    await getNotes();
+  };
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await getNotes();
+      setLoading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (isTagCreationError) {
+      setTimeout(() => {
+        setTagCreationError(false);
+      }, 3000);
+    }
+  }, [isTagCreationError]);
+
   useEffect(() => {
     getTags();
   }, []);
@@ -155,6 +179,15 @@ function MainPage() {
       setNotes(defaultNotes);
     }
   }, [selectedTags]);
+
+  useEffect(() => {
+    if (newNote.text) {
+      setNewTagsFromText(findHashtagsInText(newNote.text));
+    }
+    if (editedNote.text) {
+      setNewTagsFromText(findHashtagsInText(editedNote.text));
+    }
+  }, [newNote.text, editedNote.text]);
 
   return (
     <main>

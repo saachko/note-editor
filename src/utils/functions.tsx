@@ -12,4 +12,9 @@ const addHashtagToTag = (tag: Tag) => {
   return tag;
 };
 
-export { sortByDate, addHashtagToTag };
+const findHashtagsInText = (text: string) => {
+  const newTags: string[] = text.split(' ').filter((item) => item[0] === '#');
+  return newTags;
+};
+
+export { sortByDate, addHashtagToTag, findHashtagsInText };
