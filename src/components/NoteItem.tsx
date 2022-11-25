@@ -20,14 +20,7 @@ function NoteItem({ title, text, tags, deleteNote, editNote }: NoteItemProps) {
           {tags &&
             tags.length > 0 &&
             tags.map((tag) => (
-              <li
-                key={v4()}
-                className="tag"
-                aria-hidden="true"
-                onClick={({ target }) =>
-                  (target as HTMLElement).classList.toggle('tag_active')
-                }
-              >
+              <li key={v4()} className="tag" aria-hidden="true">
                 {tag}
               </li>
             ))}
