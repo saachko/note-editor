@@ -1,0 +1,60 @@
+$textColor: #1f1f1f;
+$textButtonColor: #ffffff;
+
+$backgroundWhite: #ffffff;
+$backgroundGrey: #f7f9fa;
+
+$transparent: transparent;
+$white: #ffffff;
+$lightBlue: #e6f7ff;
+$blue: #99defb;
+$red: #ff6347;
+$grey: #969fa4;
+$black: #1f1f1f;
+$primaryColor: #0070a0;
+
+$transition: all 0.2s ease-out;
+$hoverOpacity: 0.6;
+$activeOpacity: 0.4;
+
+$textFont: 'Inter', sans-serif;
+$titleFont: 'Montserrat', sans-serif;
+
+%control-button {
+  width: 35px;
+  height: 35px;
+  background-color: $transparent;
+  transform: scale(1.2);
+
+  &:hover {
+    background-color: $backgroundGrey;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  &:active {
+    opacity: $activeOpacity;
+  }
+}
+
+%form {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+%input {
+  display: block;
+  width: 80%;
+  padding: 5px;
+  border: solid 1px $grey;
+  font-family: $textFont;
+  font-size: 16px;
+  border-radius: 3px;
+  outline: none;
+  transition: $transition;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}

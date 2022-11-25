@@ -1,0 +1,46 @@
+@import '_variables';
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $textFont;
+  font-weight: 400;
+  font-size: 18px;
+  color: $textColor;
+  background-color: $backgroundWhite;
+}
+
+#root {
+  min-height: 100vh;
+  display: grid;
+  grid-template: 1fr / 1fr minmax(300px, 1440px) 1fr;
+  grid-template-areas: '. main .';
+}
+
+main {
+  padding: 20px;
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  font-family: $titleFont;
+}
+
+h1 {
+  font-size: 36px;
+}
