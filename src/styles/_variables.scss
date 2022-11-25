@@ -7,7 +7,7 @@ $backgroundGrey: #f7f9fa;
 $transparent: transparent;
 $white: #ffffff;
 $lightBlue: #e6f7ff;
-$blue: #0070a0;
+$blue: #99defb;
 $red: #ff6347;
 $grey: #969fa4;
 $black: #1f1f1f;
@@ -41,4 +41,16 @@ $titleFont: 'Montserrat', sans-serif;
   display: flex;
   gap: 20px;
   flex-direction: column;
+}
+
+%input {
+  display: block;
+  width: 80%;
+  padding: 5px;
+  border: solid 1px $grey;
+  font-family: $textFont;
+  font-size: 16px;
+  border-radius: 3px;
+  outline: none;
+  transition: $transition;
 }

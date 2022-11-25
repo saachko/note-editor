@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 import { Note, Tag } from './interfaces';
 
 const sortByDate = () => (a: Note | Tag, b: Note | Tag) =>
@@ -17,4 +19,14 @@ const findHashtagsInText = (text: string) => {
   return newTags;
 };
 
-export { sortByDate, addHashtagToTag, findHashtagsInText };
+const highlightTags = (inputId: string, divId: string) => {
+  $(document).ready(() => {
+    let str = $(`#${inputId}`).val() as string;
+    str = str.replace(/(<.+?>)/gi, '');
+    str = str.replace(/(?:\r\n|\n\r|\r|\n)/g, '<br /> ');
+    str = str.replace(/(?:\s|^)#([^W\s][а-яА-ЯёЁa-zA-Z0-9]*)/g, ' <b>#$1</b>');
+    $(`#${divId}`).html(str);
+  });
+};
+
+export { sortByDate, addHashtagToTag, findHashtagsInText, highlightTags };

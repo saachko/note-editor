@@ -11,6 +11,7 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "firebase": "^9.14.0",
+    "jquery": "^3.6.1",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "3.3.0",
+    "@types/jquery": "^3.5.14",
     "@types/node": "18.7.23",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.38.1",

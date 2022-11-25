@@ -109,7 +109,7 @@ function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
       <div className="form-field__wrapper">
         <Textarea
           labelText="Note text"
-          id="note"
+          id={note.id}
           name="note"
           placeholder="Start typing..."
           value={note.text}
