@@ -33,9 +33,6 @@ function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
     } else if (!note.title) {
       isFormValid = false;
       setTitleErrorMessage("This field can't be empty");
-    } else {
-      isFormValid = true;
-      setTitleErrorMessage('');
     }
 
     if (note.text && (note.text.length < 10 || note.text.length > 300)) {
@@ -46,9 +43,6 @@ function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
     } else if (!note.text) {
       isFormValid = false;
       setTextErrorMessage("This field can't be empty");
-    } else {
-      isFormValid = true;
-      setTextErrorMessage('');
     }
 
     return isFormValid;
@@ -68,6 +62,8 @@ function Form({ buttonText, note, setNote, onSubmit, tags }: FormProps) {
 
   const handleOnSubmit = () => {
     if (validateForm()) {
+      setTitleErrorMessage('');
+      setTextErrorMessage('');
       onSubmit();
     }
   };
