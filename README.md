@@ -27,5 +27,6 @@ Firebase was chosen as a database for this app. Its firestore is a cloud-hosted,
 - eslint
 - prettier
 - firebase
+- jquery
 
 _Developed by [Anastasiya Sachko](https://github.com/saachko)_
