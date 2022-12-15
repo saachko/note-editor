@@ -45,6 +45,18 @@
     color: $red;
     left: 0;
     bottom: 0;
+
+    @media (max-width: 840px) {
+      bottom: -15px;
+    }
+
+    @media (max-width: 768px) {
+      bottom: 0;
+    }
+
+    @media (max-width: 420px) {
+      bottom: -15px;
+    }
   }
 }
 
