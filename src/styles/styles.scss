@@ -209,6 +209,10 @@
   text-align: left;
   gap: 10px;
 
+  .note__container {
+    word-break: break-word;
+  }
+
   .note__controls {
     display: flex;
     gap: 10px;
